@@ -12,8 +12,9 @@ VALUES ("Sales Lead", 100000, 4),
 ;
 
 INSERT INTO employee (first_name, last_name)
-VALUES ("John", "Doe", 1, 24),
-        ("Jane", "Doe", 2, 24),
-        ("Thomas", "Jefferson", 3, 7),
-        ("Jay", "Z", 4, 7);
+VALUES ("John", "Doe"),
+        ("Jane", "Doe"),
+        ("Thomas", "Jefferson"),
+        ("Jay", "Z");
 
+;
