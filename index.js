@@ -43,20 +43,89 @@ inquirer.prompt( [
         console.table(results);
         return menu();
        })
-    } else { (answers.view_options === 'view all employees')
+    } else if (answers.view_options === 'view all employees') {
         db.query(`SELECT * FROM employee`,
          function(err, results) {
         console.table(results);
         return menu();
        })
-    };
-
-
+    } else if (answers.view_options === 'add a department') {
+        addDepartment();
+    } else if (answers.view_options === 'add a role') {
+        addRole();
+    } else if (answers.view_options === 'add an employee') {
+        addEmployee();
+    } else {
+       return updateRole();
+    }
 });
-// .catch((error) => {
-//     if(error) {
-//     } else {
+};
 
-//     }
-// });
- }
+function addDepartment() {
+    inquirer.prompt([{
+        type: 'input',
+        message: 'Please enter new department name',
+        name: 'name'
+    }])
+
+    .then(answers => {
+    console.log(answers)
+       var newDepartment = `INSERT INTO department (name) VALUES ("${answers.name}")`;
+       db.query(newDepartment, function(err, results) {
+        if (err) throw err;
+        console.log("New Department Added");
+        menu();
+       })
+    })
+};
+
+function addRole() {
+    inquirer.prompt([
+        {
+        type: 'input',
+        message: 'Please enter role title',
+        name: 'title'
+    },
+    {
+        type: 'input',
+        message: 'Please enter role salary',
+        name: 'salary'
+    }
+    // {
+    //     type: 'list',
+    //     message: 'Please choose employee department',
+    //     name: 'department'
+    //     choices:
+    // }
+]) .then(answers => {
+    console.log(answers)
+    var newRole = `INSERT INTO role (title, salary) VALUES ("${answers.title}" , "${answers.salary}")`;
+    db.query(newRole, function(err, results) {
+        if (err) throw err;
+        console.log("New Role Added");
+        menu();
+       })
+})
+};
+
+function addEmployee() {
+    // inquirer.prompt([
+    //     {
+    //     type: 'input',
+    //     message: 'Please enter Employees First Name',
+    //     name: 'first_name'
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'Please enter Employees Last Name',
+    //     name: 'salary'
+    // }
+// ])
+
+   
+};
+
+function updateRole() {
+    
+};
+
