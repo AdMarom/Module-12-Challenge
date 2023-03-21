@@ -16,5 +16,4 @@ VALUES ("John", "Doe", 1, NULL),
         ("Jane", "Doe", 2, 1),
         ("Thomas", "Jefferson", 3, NULL),
         ("Jay", "Z", 4, 2);
-
 ;

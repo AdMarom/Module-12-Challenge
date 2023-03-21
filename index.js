@@ -130,11 +130,11 @@ function addRole() {
 
 function addEmployee() {
 
-        db.query('SELECT * FROM department;', function (err, data) {
-        let departmentData = data.map(department => {
+    db.query('SELECT * FROM employee', function (err, data) {
+        let employeeData = data.map(employee => {
             return {
-                value: department.id,
-                name: `${department.name}`
+                value: employee.id,
+                name: `${employee.first_name}, ${employee.last_name}`
             }
         })
 
@@ -161,43 +161,83 @@ function addEmployee() {
 
             },
             {
-                type: 'input',
-                message: 'Please enter employees salary',
-                name: 'salary'
-            },
-            {
-                type: 'list',
-                message: 'Please choose employee department',
-                name: 'department',
-                choices: departmentData
-            },
-            {
                 type: 'list',
                 message: 'Please choose employee role',
                 name: 'role',
                 choices: roleData
-
+            },
+            {
+                type: 'list',
+                message: 'Please choose manager',
+                name: 'manager',
+                choices: employeeData
             }
+
 
 
         ]).then(answers => {
             console.log(answers)
-            var newRole = `INSERT INTO role (title, salary, department_id, role_id) VALUES ("${answers.title}" , "${answers.salary}" , "${answers.department}", "${answers.role}")`;
+            var newRole = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answers.first_name}" , "${answers.last_name}" , "${answers.role}", "${answers.manager}")`;
             db.query(newRole, function (err, results) {
                 if (err) throw err;
-                console.log("New Role Added");
+                console.log("New Employee Added");
                 menu();
             })
         })
     })
-    
-
 
 })
 
 };
 
+// update employee role
+
 function updateRole() {
+    db.query('SELECT * FROM employee', function (err, data) {
+        let employeeData = data.map(employee => {
+            return {
+                value: employee.id,
+                name: `${employee.first_name}, ${employee.last_name}`
+            }
+        })
 
-};
+        db.query('SELECT * FROM role', function (err, data) {
+            let roleData = data.map(role => {
+                return {
+                    value: role.id,
+                    name:`${role.title}`
+                }
+            })   
 
+        
+
+        inquirer.prompt ([
+            {
+                type: 'list',
+                message: 'Please choose employee',
+                name: 'employee',
+                choices: employeeData
+            },
+            {
+                type: 'list',
+                message: 'Please choose role',
+                name: 'role',
+                choices: roleData
+            }
+
+        ]).then(answers =>{
+            console.log(answers)
+            var updateRole = `UPDATE employee SET role_id = ${answers.role} WHERE ${answers.employee}`;
+            db.query(updateRole, function (err, results) {
+                if (err) throw err;
+                console.log("Employee Role Updated");
+                menu();
+            })
+        })
+    })
+
+
+
+})
+
+}
