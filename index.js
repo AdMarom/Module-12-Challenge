@@ -31,6 +31,7 @@ function menu() {
         },
     ])
 
+
     // view departments
         .then((answers) => {
             if (answers.view_options === 'view all departments') {
@@ -41,14 +42,14 @@ function menu() {
                     })
         // view roles            
             } else if (answers.view_options === 'view all roles') {
-                db.query(`SELECT * FROM role`,
+                db.query(`SELECT role.id, role.title, role.salary, department.name FROM role JOIN department ON role.department_id = department.id;`,
                     function (err, results) {
                         console.table(results);
                         return menu();
                     })
         // view employees            
             } else if (answers.view_options === 'view all employees') {
-                db.query(`SELECT * FROM employee`,
+                db.query( `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, CONCAT(manager.first_name, " ", manager.last_name) AS 'manager' FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id;`,
                     function (err, results) {
                         console.table(results);
                         return menu();
@@ -195,11 +196,15 @@ function addEmployee() {
 function updateRole() {
     db.query('SELECT * FROM employee', function (err, data) {
         let employeeData = data.map(employee => {
+            //console.log(employee)
             return {
                 value: employee.id,
                 name: `${employee.first_name}, ${employee.last_name}`
             }
+            
         })
+
+        // console.log(employeeData)
 
         db.query('SELECT * FROM role', function (err, data) {
             let roleData = data.map(role => {
@@ -226,7 +231,7 @@ function updateRole() {
             }
 
         ]).then(answers =>{
-            console.log(answers)
+            console.log(answers.role)
             var updateRole = `UPDATE employee SET role_id = ${answers.role} WHERE ${answers.employee}`;
             db.query(updateRole, function (err, results) {
                 if (err) throw err;
@@ -235,9 +240,6 @@ function updateRole() {
             })
         })
     })
-
-
-
 })
 
 }
