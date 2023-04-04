@@ -19,7 +19,7 @@ Go to command line and type "node index.js"
 
 ## Vimeo
 
-![Walkthrough](https://vimeo.com/814477466)
+[Walkthrough](https://vimeo.com/814477466)
 
 ## Questions
 
